@@ -1,0 +1,114 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public class testVehicle : MonoBehaviour
+{
+    //Variables públicas
+    public enum vehicleType {coche , moto, bicicleta}; //Lista de tipos de vehículos.
+    public vehicleType vehicle;
+    public float fuel =0; //Cantidad máxima de combustible del vehiculo, se utilizara como contador.
+    public Text nameLabel, wheelLabel, speedLabel, fuelLabel; //Etiquetas para visualizar los distintos tipos de estados del vehiculo.
+
+
+    //Variables privadas
+    private string vehicleName =""; //Nombre del vehículo
+    private int speedVehicleModifier = 1; //Velocidad máxima del vehículo
+    private int speedVehicle = 0; //Velocidad actual del vehículo
+    private int wheelNumber =0; //Número de ruedas del vehículo
+    private float fuelconsume=0.0f; //Cantidad del combustible a consumir
+    private bool repost = false; //Indica si el vehículo necesita repostar o no
+    private bool moving = false; //Indica si el vehículo esta en movimiento o esta quieto.
+
+
+    void Start()
+    {
+        //Al iniciar se asignan los diferentes vehículos y sus propiedades según los valores seleccionados por el usuario.
+       
+        fuelconsume = fuel; //Se llena el combustible de los vehiculos con su combustible máximo.
+
+
+        switch(vehicle)
+            {
+            case vehicleType.coche:
+                vehicleName = "coche";
+                speedVehicleModifier = 2;
+                wheelNumber = 4;
+                repost = true;
+                break;
+
+
+            case vehicleType.moto:
+                vehicleName = "moto";
+                speedVehicleModifier = 2;
+                wheelNumber = 2;
+                repost = true;  
+                break;
+
+
+            case vehicleType.bicicleta:
+                vehicleName = "bicicleta";
+                speedVehicleModifier = 1;
+                wheelNumber = 2;
+                repost = false;  
+                break;
+            }
+           
+            //Se asigna el valor de las etiquetas en base al valor introducido.
+            nameLabel.text = vehicleName.ToString();
+            wheelLabel.text = wheelNumber.ToString();
+    }
+   
+    void Update()
+    {
+        //En caso de moverse el vehiculo cambiara de posición y en caso de que necesite gasolina para funcionar, esta se ira consumiendo.
+        if (moving == true){
+            speedVehicle = speedVehicleModifier;
+            gameObject.transform.position = new Vector2 (transform.position.x + (speedVehicle),transform.position.y);
+           
+            if (repost == true){
+                fuelconsume -= Time.deltaTime;
+                if (fuelconsume <= 0.0f)
+                {
+                    moving = false;
+                    speedVehicle =0;
+                }
+            }
+        }
+       
+        // Se comprueba si el vehiculo en cuestión necesita gasolina o no antes de arrancar.
+        switch(repost)
+            {
+            case true:
+                if(Input.GetButtonDown("Accelerate") && (fuelconsume > 0.0f))moving = true;
+                break;
+           
+            case false:
+                if(Input.GetButtonDown("Accelerate"))moving = true;
+
+
+                break;
+            }
+
+
+        //Al pulsar esté botón el vehiculo frena y cesa su movimiento.
+        if(Input.GetButtonDown("Stop"))
+        {
+            speedVehicle =0;
+            moving = false;
+        }
+
+
+        //Al pulsar esté botón el vehiculo repostara y cesa su movimiento.
+        if(Input.GetButtonDown("RepostFuel"))fuelconsume = fuel;
+
+
+        //Se asignan las etiquetas de velocidad y gasolinas que estaran actualizandose en tiempo real.
+        speedLabel.text = speedVehicle.ToString();
+        if (fuelconsume <= 0.0f)fuelLabel.text = "0";
+        else fuelLabel.text = fuelconsume.ToString();
+    }
+}

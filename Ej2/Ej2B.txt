@@ -1,0 +1,61 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+
+public class testvehicleA : MonoBehaviour
+{
+    //Variables públicas
+    public enum vehicleType {coche , moto}; //Lista de tipos de vehículos.
+    public vehicleType vehicle;
+    public Text nameLabel, wheelLabel, speedLabel; //Etiquetas para visualizar los distintos tipos de estados del vehiculo.
+
+
+    //Variables privadas
+    private string vehicleName =""; //Nombre del vehículo
+    private int speedVehicleModifier = 1; //Velocidad máxima del vehículo
+    private int speedVehicle = 0; //Velocidad actual del vehículo
+    private int wheelNumber =0; //Número de ruedas del vehículo
+
+
+    void Start()
+    {
+        //Al iniciar se asignan los diferentes vehículos y sus propiedades según los valores seleccionados por el usuario.
+
+
+        switch(vehicle)
+            {
+            case vehicleType.coche:
+                vehicleName = "coche";
+                wheelNumber = 4;
+                break;
+
+
+            case vehicleType.moto:
+                vehicleName = "moto";
+                wheelNumber = 2;
+                break;
+            }
+           
+            //Se asigna el valor de las etiquetas en base al valor introducido.
+            nameLabel.text = vehicleName.ToString();
+            wheelLabel.text = wheelNumber.ToString();
+    }
+   
+    void Update()
+    {
+        //Movimiento del vehiculo
+       
+        gameObject.transform.position = new Vector2 (transform.position.x + (speedVehicle),transform.position.y);
+       
+        if(Input.GetButtonDown("Accelerate"))speedVehicle = speedVehicleModifier;
+
+        //Al pulsar esté botón el vehículo frena y cesa su movimiento.
+        if(Input.GetButtonDown("Cancel"))speedVehicle =0;
+
+        //Se asignan las etiquetas de velocidad.
+        speedLabel.text = speedVehicle.ToString();
+    }
+}

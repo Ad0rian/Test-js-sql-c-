@@ -1,0 +1,34 @@
+//Bucle Version
+function IsPalindrome(text)
+{
+    //Se declaran las variables lengthword para saber la longitud del string, y revword donde se almacenará la palabra invertida.
+    var lengthword = text.length;
+    var revword = '';
+   
+    //A través del for simulando un for inverso se rellena la palabra revword con ayuda de lengthword que nos permite recorrer la palabra desde el final hacia el principio.
+    for(i in text)
+    {
+        lengthword  -= 1;
+        revword += text[lengthword];
+    }
+
+
+    //Se compara el texto invertido con el texto original.
+    return revword == text;
+}
+console.log(IsPalindrome('reconocer'));
+
+
+
+
+//NoBucle Version
+function IsPalindromeNoLoop(text)
+{
+    //Se divide el texto y se junta de manera invertida.
+    var revword = text.split('').reverse().join('');
+
+
+    //Se compara el texto invertido con el texto original.
+    return revword == text;
+}
+console.log(IsPalindromeNoLoop('radar'));

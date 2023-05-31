@@ -1,0 +1,11 @@
+SELECT Customers.CustomerID, Customers.CustomerName, Customers.Address, Customers.PostalCode , count (Orders.CustomerID) as NumOrders
+FROM Customers
+LEFT JOIN Orders ON Orders.CustomerID=Customers.CustomerID
+GROUP BY Customers.CustomerID;
+
+o
+
+SELECT Customers.* , count (Orders.CustomerID) as NumOrders
+FROM Customers
+LEFT JOIN Orders ON Orders.CustomerID=Customers.CustomerID
+GROUP BY Customers.CustomerID;
